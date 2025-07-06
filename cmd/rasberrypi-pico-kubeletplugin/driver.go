@@ -28,8 +28,6 @@ import (
 	"k8s.io/dynamic-resource-allocation/resourceslice"
 	"k8s.io/klog/v2"
 
-	drapbv1 "k8s.io/kubelet/pkg/apis/dra/v1beta1"
-
 	"github.com/salman-5/rasberrypi-pico-driver/pkg/consts"
 )
 
@@ -91,18 +89,18 @@ func (d *driver) Shutdown(ctx context.Context) error {
 	d.helper.Stop()
 	return nil
 }
-func (d *driver) NodeListAndWatchResources(ctx context.Context, req *drapbv1.NodePrepareResourcesRequest) error {
-	model, err := d.client.ResourceV1beta1().ResourceSlices().Get(ctx, "gpu-0", metav1.GetOptions{})
-	if err != nil {
-		klog.Info("Error with gpu-0")
-	}
-	klog.Info(model)
-	return nil
-}
-func (d *driver) NodePrepareResources(ctx context.Context, req *drapbv1.NodePrepareResourcesRequest) (*drapbv1.NodePrepareResourcesResponse, error) {
-	klog.Infof("NodePrepareResource is called: number of claims: %d", len(req.Claims))
-	preparedResources := &drapbv1.NodePrepareResourcesResponse{Claims: map[string]*drapbv1.NodePrepareResourceResponse{}}
 
+//	func (d *driver) NodeListAndWatchResources(ctx context.Context, req *drapbv1.NodePrepareResourcesRequest) error {
+//		model, err := d.client.ResourceV1beta1().ResourceSlices().Get(ctx, "gpu-0", metav1.GetOptions{})
+//		if err != nil {
+//			klog.Info("Error with gpu-0")
+//		}
+//		klog.Info(model)
+//		return nil
+//	}
+func (d *driver) PrepareResourceClaims(ctx context.Context, claims []*resourceapi.ResourceClaim) (map[types.UID]kubeletplugin.PrepareResult, error) {
+	klog.Infof("NodePrepareResource is called: number of claims: %d", len(claims))
+	result := make(map[types.UID]kubeletplugin.PrepareResult)
 	for _, claim := range claims {
 		result[claim.UID] = d.prepareResourceClaim(ctx, claim)
 	}

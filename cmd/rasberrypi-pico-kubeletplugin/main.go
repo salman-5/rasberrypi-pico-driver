@@ -42,10 +42,9 @@ type Flags struct {
 	kubeClientConfig flags.KubeClientConfig
 	loggingConfig    *flags.LoggingConfig
 
-	nodeName  string
-	cdiRoot   string
-	vendor_id string
-	numDevices                    int
+	nodeName                      string
+	cdiRoot                       string
+	vendor_id                     string
 	kubeletRegistrarDirectoryPath string
 	kubeletPluginsDirectoryPath   string
 }
@@ -91,20 +90,6 @@ func newApp() *cli.App {
 			Value:       "2e8a",
 			Destination: &flags.vendor_id,
 			EnvVars:     []string{"VENDOR_ID"},
-		},
-		&cli.StringFlag{
-			Name:        "kubelet-registrar-directory-path",
-			Usage:       "Absolute path to the directory where kubelet stores plugin registrations.",
-			Value:       kubeletplugin.KubeletRegistryDir,
-			Destination: &flags.kubeletRegistrarDirectoryPath,
-			EnvVars:     []string{"KUBELET_REGISTRAR_DIRECTORY_PATH"},
-		},
-		&cli.StringFlag{
-			Name:        "kubelet-plugins-directory-path",
-			Usage:       "Absolute path to the directory where kubelet stores plugin data.",
-			Value:       kubeletplugin.KubeletPluginsDir,
-			Destination: &flags.kubeletPluginsDirectoryPath,
-			EnvVars:     []string{"KUBELET_PLUGINS_DIRECTORY_PATH"},
 		},
 		&cli.StringFlag{
 			Name:        "kubelet-registrar-directory-path",
